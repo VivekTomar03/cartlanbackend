@@ -4,7 +4,7 @@ const { adminAuth } = require("../middlewares/authorization");
 const ringRouter = express.Router();
 
 ringRouter.get("/", async (req, res) => {
-    let sort,page,limit,from,till,rings;
+    let sort,page,limit,from,till,rings,pages;
     
     if(req.query.sort==="asc"){
       sort=1;
@@ -41,14 +41,15 @@ ringRouter.get("/", async (req, res) => {
       }
 
       if(page>0 && limit>0){
-        rings=rings.slice((page-1) * limit, page * limit)
+        pages=Math.ceil(rings.length/limit);
+        rings=rings.slice((page-1) * limit, page * limit);
       }else if(page<0 || limit<0){
         rings=[];
       }
 
-      res.status(200).send(rings);
+      res.status(200).send([rings,pages]);
     } catch (err) {
-        res.status(400).send({"err":err.message});
+      res.status(400).send({"err":err.message});
     }
 });
 

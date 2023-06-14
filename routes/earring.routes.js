@@ -4,7 +4,7 @@ const { adminAuth } = require("../middlewares/authorization");
 const earringRouter = express.Router();
 
 earringRouter.get("/", async (req, res) => {
-  let sort,page,limit,from,till,earrings;
+  let sort,page,limit,from,till,earrings,pages;
     
     if(req.query.sort==="asc"){
       sort=1;
@@ -41,12 +41,13 @@ earringRouter.get("/", async (req, res) => {
       }
 
     if(page>0 && limit>0){
+      pages=Math.ceil(earrings.length/limit);
       earrings=earrings.slice((page-1) * limit, page * limit)
     }else if(page<0 || limit<0){
       earrings=[];
     }
 
-    res.status(200).send(earrings);
+    res.status(200).send([earrings,pages]);
   } catch (err) {
       res.status(400).send({"err":err.message});
   }
