@@ -5,7 +5,7 @@ const userAuth = async (req, res, next) => {
   const token = req.headers.authorization;
 
   if (token) {
-    const decoded = await jwt.verify(token.split(' ')[1], process.env.key);
+    const decoded = await jwt.verify(token.split(' ')[1], "userlogin");
 
     if (decoded) {
       const {userId,user} = decoded;
@@ -24,7 +24,7 @@ const adminAuth = async (req, res, next) => {
     const token = req.headers.authorization;
   
     if (token) {
-      const decoded = await jwt.verify(token.split(' ')[1], process.env.key);
+      const decoded = await jwt.verify(token.split(' ')[1], "adminlogin");
   
       if (decoded.payload==="admin") {
         next();

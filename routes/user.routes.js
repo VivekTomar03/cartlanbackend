@@ -17,9 +17,10 @@ userRouter.post("/register", async (req, res) => {
         const existing = await UserModel.findOne({ email });
         if (existing||email==='dixit@admin.com') {
           res.status(200).send({ "msg": "User already exist" });
-        } else {
+        } 
+        else {
           let user = new UserModel({
-            name,
+            name, 
             email,
             gender,
             password: hash,
@@ -39,10 +40,18 @@ userRouter.post("/login", async (req, res) => {
 
   try {
     const user = await UserModel.findOne({ email });
-    if (user) {
+     if(email==="dixit@admin.com",password==='dixit'){
+      const token = jwt.sign({payload:"admin"}, "adminlogin");
+      res.status(200).send({
+        "msg": `Welcome Admin !`,
+        "admin":true,
+        "token": token,
+      });
+    }
+    else if (user) {
       bcrypt.compare(password, user.password, (_, result) => {
         if (result) {
-          const token = jwt.sign({ userId: user._id, user:user.name }, process.env.key);
+          const token = jwt.sign({ userId: user._id, user:user.name }, "userlogin");
           res.status(200).send({
             "msg": `Login Successfull`,
             "token": token,
@@ -51,14 +60,8 @@ userRouter.post("/login", async (req, res) => {
           res.status(200).send({ "msg": "Wrong Password" });
         }
       });
-    } else if(email==="dixit@admin.com",password==='dixit'){
-      const token = jwt.sign({payload:"admin"}, process.env.key);
-      res.status(200).send({
-        "msg": `Welcome Admin !`,
-        "admin":true,
-        "token": token,
-      });
-    }else {
+    } 
+    else {
       res.status(200).send({ "msg": `${email} does not exist.` });
     }
   } catch (err) {

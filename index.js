@@ -8,19 +8,19 @@ const cartRouter = require("./routes/cart.routes");
 const {userAuth} = require("./middlewares/authorization");
 const searchRouter = require("./routes/search.routes");
 require("dotenv").config();
-
+const PORT = process.env.PORT || 8080
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 app.use("/users", userRouter);
-app.use("/rings", ringRouter);
+app.use("/rings", ringRouter); 
 app.use("/earrings", earringRouter);
 app.use("/search",searchRouter)
 app.use(userAuth);
 app.use("/cart", cartRouter);
 
-app.listen(process.env.port, async () => {
+app.listen(PORT, async () => {
   try {
     await connection;
     console.log("Connected to DB");
