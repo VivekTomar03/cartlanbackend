@@ -20,10 +20,11 @@ app.use("/search",searchRouter)
 app.use(userAuth);
 app.use("/cart", cartRouter);
 
+
 app.listen(PORT, async () => {
   try {
     await connection;
-    console.log("Connected to DB");
+    console.log("Connected to DB v");
   } catch (err) {
     console.log(err);
   }
